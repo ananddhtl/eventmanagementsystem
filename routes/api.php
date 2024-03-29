@@ -35,14 +35,13 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('become-organizer', [NormalUsersController::class, 'becomeorganizer']);
 
 
-        // CRUD API for the event
+       
         Route::post('store-event', [EventController::class, 'store']);
         Route::get('geteventdetails/{id}', [EventController::class, 'index']);
         Route::post('deletevent/{id}', [EventController::class, 'destroy']);
         Route::post('updateevent/{id}', [EventController::class, 'update']);
 
 
-        //Route for the booking of the event
         Route::post('book-event', [BookEventController::class, 'store']);
         Route::get('getbookevent/{id}', [BookEventController::class, 'index']);
 

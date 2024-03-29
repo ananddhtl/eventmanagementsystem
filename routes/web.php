@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\NormalUsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('admindashboard.index');
 });
+
+Route::get('getall-events', [EventController::class, 'allevents'])->name('getallevents');
+
+Route::get('getall-organizer', [NormalUsersController::class, 'allorganizers'])->name('getallorganizer');

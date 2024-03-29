@@ -151,4 +151,19 @@ class EventController extends BaseApiController
         }
     }
 
+    public function allevents()
+    {
+        try {
+
+            $event = Event::all();
+            
+            return view('admindashboard.eventdetails',compact('event'));
+
+        } catch (Exception $e) {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+
+
 }

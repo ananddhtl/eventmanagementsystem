@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\BaseApiController;
 use App\Models\NormalUsers;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\EventRequest;
+use App\Http\Controllers\BaseApiController;
 class NormalUsersController extends BaseApiController
 {
     /**
@@ -29,45 +29,7 @@ class NormalUsersController extends BaseApiController
      */
     public function store(Request $request)
     {
-
-        try {
-            DB::beginTransaction();
-            $validated = $request->validated();
-
-            $user = NormalUsers::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'phonenumber' => $validated['phonenumber'],
-                'address' => $validated['address'],
-                'gender' => $validated['gender'],
-                'password' => bcrypt($validated['password']),
-            ]);
-
-            $tokenResult = $user->createToken('Personal Access Token');
-            $token = $tokenResult->token;
-            $token->expires_at = Carbon::now()->addMonths(3);
-            $token->save();
-
-            if (!$tokenResult) {
-                return $this->sendError("Server Error. Please try again later.");
-            }
-
-            $token = [
-                'access_token' => $tokenResult->accessToken,
-                'token_type' => 'Bearer',
-                'expires_at' => Carbon::parse(
-                    $tokenResult->token->expires_at
-                )->toDateTimeString(),
-            ];
-
-            DB::commit();
-
-            return $this->sendResponse(['user' => new NormalUsersResource($user), 'token' => $token]);
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-            return $this->sendError("Server Error. Please try again later.");
-        }
+        
     }
 
     /**
@@ -91,7 +53,7 @@ class NormalUsersController extends BaseApiController
      */
     public function update(Request $request, NormalUsers $normalUsers)
     {
-
+        
     }
 
     /**
@@ -102,6 +64,7 @@ class NormalUsersController extends BaseApiController
         //
     }
 
+
     public function becomeorganizer(Request $request, NormalUsers $normalUsers)
     {
         {
@@ -109,7 +72,7 @@ class NormalUsersController extends BaseApiController
                 $user = NormalUsers::findOrfail(auth('api')->user()->id);
                 $user->status = 1;
                 $user->save();
-                return $this->sendResponse([
+                return $this->sendResponse([  
                 ], "Sucessfully updated the user into organizer");
             } catch (\Exception $e) {
                 dd($e->getMessage());
@@ -117,5 +80,18 @@ class NormalUsersController extends BaseApiController
             }
         }
     }
+    public function allorganizers(Request $request, NormalUsers $normalUsers)
+    {
+        {
+            try {
+                $user = NormalUsers::get();
+                return view('admindashboard.allorganizers',compact('user'));
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+                return $this->sendError("Server Error. Please try again later.");
+            }
+        }
+    }
+
 
 }
