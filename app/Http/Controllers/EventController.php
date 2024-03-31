@@ -170,7 +170,7 @@ class EventController extends BaseApiController
     {
         try {
 
-            $event = Event::all();
+            $event = Event::get();
             
             return view('admindashboard.eventdetails',compact('event'));
 
