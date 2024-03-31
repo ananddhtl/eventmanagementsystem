@@ -84,7 +84,7 @@ class NormalUsersController extends BaseApiController
     {
         {
             try {
-                $user = NormalUsers::get();
+                $user = NormalUsers::where('status',1)->get();
                 return view('admindashboard.allorganizers',compact('user'));
             } catch (\Exception $e) {
                 dd($e->getMessage());
