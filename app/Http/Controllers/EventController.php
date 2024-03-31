@@ -31,22 +31,21 @@ class EventController extends BaseApiController
         }
     }
     public function forhomepageapi()
-{
-    try {
-        $events = Event::all();
+    {
+        try {
+            $events = Event::all();
 
-        $eventResources = [];
-        foreach ($events as $event) {
-            $eventResources[] = new EventResource($event);
+            $eventResources = [];
+            foreach ($events as $event) {
+                $eventResources[] = new EventResource($event);
+            }
+
+            return $this->sendResponse($eventResources, 'Events fetched successfully!');
+        } catch (Exception $e) {
+            return $this->sendError('Something went wrong!');
         }
-
-        return $this->sendResponse($eventResources, 'Events fetched successfully!');
-    } catch (Exception $e) {
-        return $this->sendError('Something went wrong!');
     }
-}
 
-    
     public function create()
     {
         //
@@ -75,12 +74,11 @@ class EventController extends BaseApiController
                 'public_seats_price' => $validated['public_seats_price'],
                 'organizer_id' => $user->id,
             ]);
-    
 
             $event->save();
-    
+
             DB::commit();
-    
+
             return $this->sendResponse([], "Successfully Stored");
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -88,7 +86,6 @@ class EventController extends BaseApiController
             return $this->sendError("Server Error. Please try again later.");
         }
     }
-    
 
     /**
      * Display the specified resource.
@@ -122,7 +119,7 @@ class EventController extends BaseApiController
                 ->where('organizer_id', $user->id)
                 ->firstOrFail();
             if (!$event) {
-                    return $this->sendError('Event not found!');
+                return $this->sendError('Event not found!');
             }
             $event->event_title = $validated['event_title'];
             $event->description = $validated['description'];
@@ -171,14 +168,12 @@ class EventController extends BaseApiController
         try {
 
             $event = Event::get();
-            
-            return view('admindashboard.eventdetails',compact('event'));
+
+            return view('admindashboard.eventdetails', compact('event'));
 
         } catch (Exception $e) {
             return $this->sendError('Something went wrong!');
         }
     }
-
-
 
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\BaseApiController;
 use App\Models\NormalUsers;
 use Illuminate\Http\Request;
-use App\Http\Requests\EventRequest;
-use App\Http\Controllers\BaseApiController;
+
 class NormalUsersController extends BaseApiController
 {
     /**
@@ -29,7 +29,7 @@ class NormalUsersController extends BaseApiController
      */
     public function store(Request $request)
     {
-        
+
     }
 
     /**
@@ -53,7 +53,7 @@ class NormalUsersController extends BaseApiController
      */
     public function update(Request $request, NormalUsers $normalUsers)
     {
-        
+
     }
 
     /**
@@ -64,7 +64,6 @@ class NormalUsersController extends BaseApiController
         //
     }
 
-
     public function becomeorganizer(Request $request, NormalUsers $normalUsers)
     {
         {
@@ -72,7 +71,7 @@ class NormalUsersController extends BaseApiController
                 $user = NormalUsers::findOrfail(auth('api')->user()->id);
                 $user->status = 1;
                 $user->save();
-                return $this->sendResponse([  
+                return $this->sendResponse([
                 ], "Sucessfully updated the user into organizer");
             } catch (\Exception $e) {
                 dd($e->getMessage());
@@ -84,14 +83,13 @@ class NormalUsersController extends BaseApiController
     {
         {
             try {
-                $user = NormalUsers::where('status',1)->get();
-                return view('admindashboard.allorganizers',compact('user'));
+                $user = NormalUsers::where('status', 1)->get();
+                return view('admindashboard.allorganizers', compact('user'));
             } catch (\Exception $e) {
                 dd($e->getMessage());
                 return $this->sendError("Server Error. Please try again later.");
             }
         }
     }
-
 
 }
