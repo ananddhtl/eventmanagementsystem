@@ -124,6 +124,7 @@ class EventController extends BaseApiController
             $event->event_title = $validated['event_title'];
             $event->description = $validated['description'];
             $event->event_date = $validated['event_date'];
+            $event->event_time = $validated['event_time'];
             $event->location = $validated['location'];
             $event->thumbnail = $validated['thumbnail'];
             $event->total_seats = $validated['total_seats'];
