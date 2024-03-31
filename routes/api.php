@@ -27,6 +27,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::get('geteventdetails/{id}', [EventController::class, 'index']);
+    Route::get('getallevent', [EventController::class, 'forhomepageapi']);
     Route::middleware('api')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('change-password', [AuthController::class, 'changePassword']);
@@ -37,7 +39,7 @@ Route::group(['prefix' => 'auth'], function () {
 
        
         Route::post('store-event', [EventController::class, 'store']);
-        Route::get('geteventdetails/{id}', [EventController::class, 'index']);
+       
         Route::post('deletevent/{id}', [EventController::class, 'destroy']);
         Route::post('updateevent/{id}', [EventController::class, 'update']);
 

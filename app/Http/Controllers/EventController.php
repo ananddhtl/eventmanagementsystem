@@ -30,10 +30,23 @@ class EventController extends BaseApiController
             return $this->sendError('Something went wrong!');
         }
     }
+    public function forhomepageapi()
+{
+    try {
+        $events = Event::all();
 
-    /**
-     * Show the form for creating a new resource.
-     */
+        $eventResources = [];
+        foreach ($events as $event) {
+            $eventResources[] = new EventResource($event);
+        }
+
+        return $this->sendResponse($eventResources, 'Events fetched successfully!');
+    } catch (Exception $e) {
+        return $this->sendError('Something went wrong!');
+    }
+}
+
+    
     public function create()
     {
         //
@@ -52,6 +65,7 @@ class EventController extends BaseApiController
                 'event_title' => $validated['event_title'],
                 'description' => $validated['description'],
                 'event_date' => $validated['event_date'],
+                'event_time' => $validated['event_time'],
                 'location' => $validated['location'],
                 'thumbnail' => $validated['thumbnail'],
                 'total_seats' => $validated['total_seats'],
@@ -69,6 +83,7 @@ class EventController extends BaseApiController
     
             return $this->sendResponse([], "Successfully Stored");
         } catch (\Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             return $this->sendError("Server Error. Please try again later.");
         }

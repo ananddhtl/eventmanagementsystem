@@ -20,6 +20,7 @@ class EventRequest extends FormRequest
             'event_title'          => 'required|string|min:6',
             'description'       => 'required|string|min:6',
             'event_date'          => 'required',
+            'event_time'          => 'required',
             'location'       => 'required',
             'thumbnail'       => 'required',
             'total_seats'       => 'required',
