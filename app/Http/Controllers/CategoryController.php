@@ -19,7 +19,6 @@ class CategoryController extends Controller
         }
     }
 
-
     public function addcategory()
     {
         return view('admindashboard.addcategory');
@@ -38,29 +37,28 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         try {
             DB::beginTransaction();
             $request->validate([
                 'title' => 'required',
-                
+
             ]);
             $category = Category::create([
                 'title' => $request->title,
-                
+
             ]);
             $category->save();
-           
 
             DB::commit();
-            return redirect()->route('category')->with('message','Your data has been saved');
+            return redirect()->route('category')->with('message', 'Your data has been saved');
         } catch (\Exception $e) {
             DB::rollBack();
             dd($e->getMessage());
             return $this->sendError("Server Error. Please try again later.");
         }
-    
-}
+
+    }
     /**
      * Display the specified resource.
      */

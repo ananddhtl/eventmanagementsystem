@@ -34,28 +34,27 @@ class VenueController extends Controller
      */
     public function store(Request $request)
     {
-        
-            try {
-                DB::beginTransaction();
-                $request->validate([
-                    'title' => 'required',
-                    
-                ]);
-                $venue = Venue::create([
-                    'title' => $request->title,
-                    
-                ]);
-                $venue->save();
-               
 
-                DB::commit();
-                return redirect()->route('venue')->with('message','Your data has been saved');
-            } catch (\Exception $e) {
-                DB::rollBack();
-                dd($e->getMessage());
-                return $this->sendError("Server Error. Please try again later.");
-            }
-        
+        try {
+            DB::beginTransaction();
+            $request->validate([
+                'title' => 'required',
+
+            ]);
+            $venue = Venue::create([
+                'title' => $request->title,
+
+            ]);
+            $venue->save();
+
+            DB::commit();
+            return redirect()->route('venue')->with('message', 'Your data has been saved');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+            return $this->sendError("Server Error. Please try again later.");
+        }
+
     }
 
     /**
@@ -71,53 +70,49 @@ class VenueController extends Controller
      */
     public function edit(Venue $venue, $id)
     {
-        $editvenue =  Venue::find($id);
-        return view('admindashboard.editvenue',compact('editvenue'));
+        $editvenue = Venue::find($id);
+        return view('admindashboard.editvenue', compact('editvenue'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-{
-    try {
-        DB::beginTransaction();
-        
-        $request->validate([
-            'title' => 'required',
-        ]);
-        
+    {
+        try {
+            DB::beginTransaction();
 
-        $venue = Venue::findOrFail($id);
-        
-      
-        $venue->title = $request->title;
-        
-     
-        $venue->save();
+            $request->validate([
+                'title' => 'required',
+            ]);
 
-        DB::commit();
-        
-        return redirect()->route('venue')->with('message', 'Your data has been updated');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        dd($e->getMessage());
-        return $this->sendError("Server Error. Please try again later.");
+            $venue = Venue::findOrFail($id);
+
+            $venue->title = $request->title;
+
+            $venue->save();
+
+            DB::commit();
+
+            return redirect()->route('venue')->with('message', 'Your data has been updated');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+            return $this->sendError("Server Error. Please try again later.");
+        }
     }
-}
-
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Venue $venue)
     {
-        
-            $venue = Venue::find($id);
-            if (!$venue) {
-                return response()->json(['error' => 'Category  not found'], 404);
-            }
-            $venue->delete();
-            return redirect()->route('venue')->with('message', 'Your data has been deleted successfully');
+
+        $venue = Venue::find($id);
+        if (!$venue) {
+            return response()->json(['error' => 'Category  not found'], 404);
         }
+        $venue->delete();
+        return redirect()->route('venue')->with('message', 'Your data has been deleted successfully');
     }
+}
