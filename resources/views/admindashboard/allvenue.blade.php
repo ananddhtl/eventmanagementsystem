@@ -23,7 +23,11 @@
                     </a>
                 </div>
                 <div class="card-body ">
-
+                @if(session('message'))
+<div id="successMessage" class="alert alert-success">
+    {{ session('message') }}
+</div>
+@endif
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
@@ -41,16 +45,9 @@
                                     <td>{{$item->title}}</td>
 
                                     <td><a href="{{ route('venue.edit', ['id' => $item->id]) }}"><button type="submit"
-                                                class="btn btn-primary">Edit</button></a>&nbsp;<button
-                                            onclick="confirmDelete('{{ route('venue.delete', ['id' => $item->id]) }}')"
-                                            type="button" class="btn btn-danger">Delete</button>
-
-                                        <form id="deleteForm{{$item->id}}"
-                                            action="{{ route('venue.delete', ['id' => $item->id]) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
+                                                class="btn btn-primary">Edit</button></a>&nbsp; <a href="{{ route('venue.delete', ['id' => $item->id]) }}">
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </a>
                                         @endforeach
                             </tbody>
                         </table>

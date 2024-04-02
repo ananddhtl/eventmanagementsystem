@@ -16,7 +16,7 @@
 
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Event List</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Accepted Event List</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -33,7 +33,7 @@
                                             <th>Total Vip Seats</th>
                                             <th> Vip Seats Price</th>
                                             <th> Public Seats Price</th>
-                                            <th> Action</th>
+                                           
                                         </tr>
                                     </thead>
 
@@ -51,8 +51,7 @@
                                             <td>{{$item->total_vip_seats}}</td>
                                             <td>{{$item->vip_seats_price}}</td>
                                             <td>{{$item->public_seats_price}}</td>
-                                            <td><a href="{{ route('event.accept', ['id' => $item->id]) }}"><button type="submit"
-                                                class="btn btn-primary">Accept Event</button></td>
+                                          
                                         </tr>
                                         @endforeach
                                     </tbody>

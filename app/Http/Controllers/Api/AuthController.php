@@ -6,7 +6,10 @@ use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Api\User\LoginRequest;
 use App\Http\Requests\Api\User\RegisterRequest;
 use App\Http\Resources\NormalUsersResource;
+use App\Http\Resources\VenueResource;
 use App\Models\NormalUsers;
+use App\Models\Venue;
+use App\Models\Category;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -53,7 +56,7 @@ class AuthController extends BaseApiController
 
             return $this->sendResponse(['user' => new NormalUsersResource($user), 'token' => $token]);
         } catch (\Exception $e) {
-           
+            dd($e->getMessage());
             DB::rollBack();
             return $this->sendError("Server Error. Please try again later.");
         }
@@ -249,6 +252,31 @@ class AuthController extends BaseApiController
             ]);
         } catch (\Exception $e) {
             return $this->sendError("Server Error. Please try again later.");
+        }
+    }
+
+    public function getallvenue()
+    {
+        try {
+            $venues = Venue::all();
+    
+            return $this->sendResponse(VenueResource::collection($venues), 'Data fetched successfully!');
+        } catch (Exception $e) {
+            dd($e->getMessage());
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+
+    public function getallcategory()
+    {
+        try {
+            $category = Category::all();
+    
+            return $this->sendResponse(VenueResource::collection($category), 'Data fetched successfully!');
+        } catch (Exception $e) {
+            dd($e->getMessage());
+            return $this->sendError('Something went wrong!');
         }
     }
 }

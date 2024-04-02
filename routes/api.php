@@ -29,25 +29,24 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
     Route::get('geteventdetails/{id}', [EventController::class, 'index']);
     Route::get('getallevent', [EventController::class, 'forhomepageapi']);
+    Route::get('searchevent', [EventController::class, 'searchevent']);
+    Route::get('getallvenue', [AuthController::class, 'getallvenue']);
+    Route::get('getallcategory', [AuthController::class, 'getallcategory']);
     Route::middleware('api')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('change-password', [AuthController::class, 'changePassword']);
         Route::post('verify-otp', [AuthController::class, 'forgotOTPVerify']);
         Route::post('reset-password', [AuthController::class, 'resetPassword']);
         Route::post('become-organizer', [NormalUsersController::class, 'becomeorganizer']);
-
-
-       
         Route::post('store-event', [EventController::class, 'store']);
-       
         Route::post('deletevent/{id}', [EventController::class, 'destroy']);
         Route::post('updateevent/{id}', [EventController::class, 'update']);
-
-
         Route::post('book-event', [BookEventController::class, 'store']);
         Route::get('getbookevent/{id}', [BookEventController::class, 'index']);
+        Route::get('getorganizerevent', [EventController::class, 'getorganizerevent']);
+
+
+
 
     });
-
-   
 });

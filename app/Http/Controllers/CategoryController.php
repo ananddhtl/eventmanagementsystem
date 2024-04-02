@@ -70,24 +70,57 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(Category $category, $id)
     {
-        //
+        $editcategory = Category::find($id);
+        return view('admindashboard.editcategory', compact('editcategory'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, Category $category, $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $request->validate([
+                'title' => 'required',
+            ]);
+
+            $category = Category::findOrFail($id);
+
+            $category->title = $request->title;
+
+            $category->save();
+
+            DB::commit();
+
+            return redirect()->route('category')->with('message', 'Your data has been updated');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+            return $this->sendError("Server Error. Please try again later.");
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        try {
+          
+            $category = Category::findOrFail($id);
+            
+          
+            $category->delete();
+            
+          
+            return redirect()->back()->with('success', 'Category deleted successfully.');
+        } catch (\Exception $e) {
+           
+            return redirect()->back()->with('error', 'Failed to delete category.');
+        }
     }
 }

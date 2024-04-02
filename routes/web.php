@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('dashboard', [AdminUserController::class, 'dashboard'])->name('dashboard');
 Route::get('getall-events', [EventController::class, 'allevents'])->name('getallevents');
 
+Route::get('getall-acceptedevents', [EventController::class, 'allacceptedevents'])->name('getallacceptedevents');
 Route::get('getall-venue', [VenueController::class, 'index'])->name('venue');
 
 Route::get('add-venue', [VenueController::class, 'addvenue'])->name('addvenue');
@@ -45,6 +46,8 @@ Route::get('/deletevenue/{id}', [VenueController::class, 'destroy'])->name('venu
 
 Route::post('/updatevenue/{id}', [VenueController::class, 'update'])->name('venue.update');
 
+Route::get('/acceptevent/{id}', [EventController::class, 'acceptevent'])->name('event.accept');
+
 
 
 Route::get('getall-category', [CategoryController::class, 'index'])->name('category');
@@ -52,6 +55,13 @@ Route::get('getall-category', [CategoryController::class, 'index'])->name('categ
 Route::get('add-category', [CategoryController::class, 'addcategory'])->name('addcategory');
 
 Route::post('storecategory', [CategoryController::class, 'store'])->name('storecategory');
+
+Route::get('/editcategory/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+
+
+Route::get('/deletecategory/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
+
+Route::post('/updatecategory/{id}', [CategoryController::class, 'update'])->name('category.update');
 
 Route::get('getall-organizer', [NormalUsersController::class, 'allorganizers'])->name('getallorganizer');
 

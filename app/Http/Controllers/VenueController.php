@@ -105,7 +105,7 @@ class VenueController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Venue $venue)
+    public function destroy(Venue $venue, $id)
     {
 
         $venue = Venue::find($id);
@@ -115,4 +115,17 @@ class VenueController extends Controller
         $venue->delete();
         return redirect()->route('venue')->with('message', 'Your data has been deleted successfully');
     }
+
+    public function getallvenue()
+    {
+        try {
+            $venue = Venue::all();
+
+            return $this->sendResponse(new VenueResource($event), 'Data fetched successfully!');
+        } catch (Exception $e) {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    
 }

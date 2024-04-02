@@ -23,7 +23,11 @@
                     </a>
                 </div>
                 <div class="card-body ">
-
+                @if(session('message'))
+<div id="successMessage" class="alert alert-success">
+    {{ session('message') }}
+</div>
+@endif
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
@@ -40,17 +44,16 @@
                                 <tr>
                                     <td>{{$item->title}}</td>
 
-                                    <td><a href="{{ route('venue.edit', ['id' => $item->id]) }}"><button type="submit"
-                                                class="btn btn-primary">Edit</button></a>&nbsp;<button
-                                            onclick="confirmDelete('{{ route('venue.delete', ['id' => $item->id]) }}')"
-                                            type="button" class="btn btn-danger">Delete</button>
+                                    <td>
+    <a href="{{ route('category.edit', ['id' => $item->id]) }}">
+        <button type="submit" class="btn btn-primary">Edit</button>
+    </a>&nbsp;
+    <a href="{{ route('category.delete', ['id' => $item->id]) }}">
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </a>
+</td>
 
-                                        <form id="deleteForm{{$item->id}}"
-                                            action="{{ route('venue.delete', ['id' => $item->id]) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
+                                       
                                         @endforeach
                             </tbody>
                         </table>
@@ -84,14 +87,14 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+   
     <script>
-    function confirmDelete(itemId) {
-        if (confirm('Are you sure you want to delete this item?')) {
-            // Instead of 'deleteForm' + item, it should be 'deleteForm' + itemId
-            document.getElementById('deleteForm' + itemId).submit();
+    function confirmDelete(categoryId) {
+        if (confirm('Are you sure you want to delete this category?')) {
+           
+            document.getElementById('deleteForm' + categoryId).submit();
         }
     }
-    </script>
-
+</script>
 
     @include('admindashboard.include.footer')
