@@ -22,6 +22,7 @@ class EventRequest extends FormRequest
             'event_date'          => 'required',
             'event_time'          => 'required',
             'location'       => 'required',
+            'category'       => 'required',
             'thumbnail'       => 'required',
             'total_seats'       => 'required',
             'total_vip_seats'       => 'required',
