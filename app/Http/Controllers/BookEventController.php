@@ -15,6 +15,7 @@ class BookEventController extends BaseApiController
     /**
      * Display a listing of the resource.
      */
+   
     public function index()
     {
         try {
@@ -24,25 +25,25 @@ class BookEventController extends BaseApiController
                 return $this->sendError('User not found!');
             }
     
-            $bookEvent = BookEvent::where('user_id', $user->id)
-                ->first();
+           
+            $bookEvents = BookEvent::where('user_id', $user->id)
+                ->get();
     
-            if (!$bookEvent) {
-                return $this->sendError('Event not found!');
+            if ($bookEvents->isEmpty()) {
+                return $this->sendError('Events not found!');
             }
     
            
-           
+            $eventIds = $bookEvents->pluck('event_id')->toArray();
     
            
-            $event = Event::findOrFail($bookEvent->event_id);
+            $events = Event::whereIn('id', $eventIds)->get();
     
-            return $this->sendResponse(new EventResource($event), 'Data fetched successfully!');
+            return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');
         } catch (Exception $e) {
             return $this->sendError('Something went wrong!');
         }
     }
-    
      
     /**
      * Show the form for creating a new resource.
