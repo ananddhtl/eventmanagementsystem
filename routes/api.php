@@ -32,7 +32,9 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('searchevent', [EventController::class, 'searchevent']);
     Route::get('getallvenue', [AuthController::class, 'getallvenue']);
     Route::get('getallcategory', [AuthController::class, 'getallcategory']);
+
     Route::middleware('api')->group(function () {
+
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('change-password', [AuthController::class, 'changePassword']);
         Route::post('verify-otp', [AuthController::class, 'forgotOTPVerify']);
@@ -42,7 +44,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('deletevent/{id}', [EventController::class, 'destroy']);
         Route::post('updateevent/{id}', [EventController::class, 'update']);
         Route::post('book-event', [BookEventController::class, 'store']);
-        Route::get('getbookevent/{id}', [BookEventController::class, 'index']);
+        Route::get('getbookevent', [BookEventController::class, 'index']);
         Route::get('getorganizerevent', [EventController::class, 'getorganizerevent']);
 
 

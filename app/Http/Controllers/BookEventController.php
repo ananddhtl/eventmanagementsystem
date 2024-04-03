@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\NormalUsers;
 use Illuminate\Http\Request;
 use App\Http\Resources\BookEventResource;
+use App\Http\Resources\EventResource;
 use Illuminate\Support\Facades\DB;
 
 class BookEventController extends BaseApiController
@@ -14,24 +15,35 @@ class BookEventController extends BaseApiController
     /**
      * Display a listing of the resource.
      */
-    public function index($id)
+    public function index()
     {
-
         try {
-
-            $event = BookEvent::findOrFail($id);
-
-            if (!$event) {
+            $user = NormalUsers::findOrFail(auth('api')->user()->id);
+    
+            if (!$user) {
+                return $this->sendError('User not found!');
+            }
+    
+            $bookEvent = BookEvent::where('user_id', $user->id)
+                ->first();
+    
+            if (!$bookEvent) {
                 return $this->sendError('Event not found!');
             }
-
-            return $this->sendResponse(new BookEventResource($event), 'Data fetched successfully!');
+    
+           
+           
+    
+           
+            $event = Event::findOrFail($bookEvent->event_id);
+    
+            return $this->sendResponse(new EventResource($event), 'Data fetched successfully!');
         } catch (Exception $e) {
             return $this->sendError('Something went wrong!');
         }
-
     }
-
+    
+     
     /**
      * Show the form for creating a new resource.
      */
@@ -46,6 +58,7 @@ class BookEventController extends BaseApiController
     public function store(Request $request)
     {
         try {
+            
             DB::beginTransaction();
             $request->validate([
                 'event_id' => 'required',
@@ -54,12 +67,7 @@ class BookEventController extends BaseApiController
             ]);
             $user = NormalUsers::findOrFail(auth('api')->user()->id);
 
-            if (!$user) {
-                return $this->sendError('User not found!');
-            }
-            $event = Event::where('id', $request->event_id)
-                ->where('organizer_id', $user->id)
-                ->firstOrFail();
+             $event = Event::where('id', $request->event_id)->first();
 
             if (!$event) {
                 return $this->sendError('Event not found!');

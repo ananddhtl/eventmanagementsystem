@@ -8,16 +8,16 @@
         
      
         if (successMessage) {
-            // Set a timeout to fade out the success message after 5 seconds
+           
             setTimeout(function() {
-                // Fade out the success message
+               
                 successMessage.style.transition = "opacity 1s";
                 successMessage.style.opacity = 0;
-                // Set a timeout to remove the success message from the DOM after the transition ends
+               
                 setTimeout(function() {
                     successMessage.remove();
-                }, 1000); // Wait for 1 second for the fade out transition to complete
-            }, 5000); // Wait for 5 seconds before starting the fade out
+                }, 1000); 
+            }, 5000); 
         }
     });
 </script>

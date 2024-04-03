@@ -116,16 +116,7 @@ class VenueController extends Controller
         return redirect()->route('venue')->with('message', 'Your data has been deleted successfully');
     }
 
-    public function getallvenue()
-    {
-        try {
-            $venue = Venue::all();
-
-            return $this->sendResponse(new VenueResource($event), 'Data fetched successfully!');
-        } catch (Exception $e) {
-            return $this->sendError('Something went wrong!');
-        }
-    }
+    
 
     
 }

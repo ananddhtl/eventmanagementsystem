@@ -268,6 +268,7 @@ class AuthController extends BaseApiController
     }
 
 
+
     public function getallcategory()
     {
         try {

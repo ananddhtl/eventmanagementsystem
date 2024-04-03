@@ -35,7 +35,11 @@
         <i class="fas fa-fw fa-chart-area"></i>
         <span>Accepted Event List</span></a>
 </li>
-
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('getallacceptedevents') }}">
+        <i class="fas fa-fw fa-chart-area"></i>
+        <span> Event  List</span></a>
+</li>
 
 <!-- Nav Item - Utilities Collapse Menu -->
 <li class="nav-item">
