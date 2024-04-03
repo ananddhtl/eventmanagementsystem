@@ -48,7 +48,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('getorganizerevent', [EventController::class, 'getorganizerevent']);
 
 
-
+//this is the test commit
 
     });
 });
