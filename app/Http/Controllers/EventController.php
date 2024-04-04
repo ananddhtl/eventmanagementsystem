@@ -9,6 +9,7 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Models\NormalUsers;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 
 class EventController extends BaseApiController
@@ -38,7 +39,7 @@ class EventController extends BaseApiController
         try {
             $userid = auth('api')->user()->id; 
     
-            $events = Event::where('organizer_id', $userid)->get();
+            $events = Event::where('organizer_id', $userid)->where('status',1)->get();
     
            
             if ($events->isEmpty()) {
@@ -262,15 +263,24 @@ class EventController extends BaseApiController
         return redirect()->route('getallevents')->with('message', 'Your venue has been approved successfully');
     }
 
-    public function searchevent(Request $request )
+    public function searchevent(Request $request)
 {
+    $validator = Validator::make($request->all(), [
+        'title' => 'required',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['error' => $validator->errors()->first()], 400);
+    }
+
     try {
         $title = $request->input('title');
         $events = Event::where('event_title', 'like', "%$title%")->get();
-       
+        
         if ($events->isEmpty()) {
-            return $this->sendError('No events found matching the title!');
+            return response()->json(['error' => 'Event not found'], 404);
         }
+
         return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');
     } catch (Exception $e) {
         return $this->sendError('Something went wrong!');
