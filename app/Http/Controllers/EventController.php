@@ -11,6 +11,7 @@ use App\Models\NormalUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use App\Models\FavouriteEvent;
 
 class EventController extends BaseApiController
 {
@@ -279,6 +280,45 @@ class EventController extends BaseApiController
         
         if ($events->isEmpty()) {
             return response()->json(['error' => 'Event not found'], 404);
+        }
+
+        return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');
+    } catch (Exception $e) {
+        return $this->sendError('Something went wrong!');
+    }
+}
+
+public function categorywiseevent(Request $request, $id)
+{
+   
+    try {
+      
+        $events = Event::where('category', $id)->get();
+        
+        if ($events->isEmpty()) {
+            return response()->json(['error' => 'Event not found'], 404);
+        }
+
+        return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');
+    } catch (Exception $e) {
+        return $this->sendError('Something went wrong!');
+    }
+}
+public function getorganizerfavouriteevent()
+{
+    try {
+        $user = NormalUsers::findOrFail(auth('api')->user()->id);
+
+       
+        $favouriteEvents = FavouriteEvent::where('user_id', $user->id)->pluck('event_id');
+
+      
+        $events = Event::whereIn('id', $favouriteEvents)
+                       ->where('status', 1)
+                       ->get();
+
+        if ($events->isEmpty()) {
+            return $this->sendError('Favorite Events not found for this organizer!');
         }
 
         return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');

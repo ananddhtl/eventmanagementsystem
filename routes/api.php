@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\NormalUsersController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\BookEventController;
+use App\Http\Controllers\FavouriteEventController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('searchevent', [EventController::class, 'searchevent']);
     Route::get('getallvenue', [AuthController::class, 'getallvenue']);
     Route::get('getallcategory', [AuthController::class, 'getallcategory']);
+    Route::get('categorywiseevent/{id}', [EventController::class, 'categorywiseevent']);
 
     Route::middleware('api')->group(function () {
 
@@ -46,9 +48,10 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('book-event', [BookEventController::class, 'store']);
         Route::get('getbookevent', [BookEventController::class, 'index']);
         Route::get('getorganizerevent', [EventController::class, 'getorganizerevent']);
+        Route::post('addtofavourites', [FavouriteEventController::class, 'store']);
+        Route::get('getorganizerfavouriteevent', [EventController::class, 'getorganizerfavouriteevent']);
+        Route::post('deletefavouriteevent', [FavouriteEventController::class, 'destroy']);
 
-
-//this is the test commit
 
     });
 });
