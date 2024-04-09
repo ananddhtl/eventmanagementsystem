@@ -16,7 +16,7 @@
 
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Organizer List</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Normal Users List</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -43,8 +43,7 @@
                                             <td>{{$item->gender}}</td>
                                             <td>{{$item->email}}</td>
                                             <td><a href="{{ route('delete.organizer', ['id' => $item->id]) }}"><button type="submit"
-                                                class="btn btn-primary">Delete Organizer</button>&nbsp;&nbsp;<a href="{{ route('demote.organizer', ['id' => $item->id]) }}"><button type="submit"
-                                                    class="btn btn-info">Demote to Normal  User</button></td>
+                                                class="btn btn-primary">Delete User</button></td>
                                         </tr>
                                         @endforeach
                                     </tbody>

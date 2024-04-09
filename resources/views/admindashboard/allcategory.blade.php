@@ -23,11 +23,11 @@
                     </a>
                 </div>
                 <div class="card-body ">
-                @if(session('message'))
-<div id="successMessage" class="alert alert-success">
-    {{ session('message') }}
-</div>
-@endif
+                    @if (session('message'))
+                        <div id="successMessage" class="alert alert-success">
+                            {{ session('message') }}
+                        </div>
+                    @endif
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
@@ -40,21 +40,19 @@
 
 
                             <tbody>
-                                @foreach($category as $item)
-                                <tr>
-                                    <td>{{$item->title}}</td>
+                                @foreach ($category as $item)
+                                    <tr>
+                                        <td>{{ $item->title }}</td>
 
-                                    <td>
-    <a href="{{ route('category.edit', ['id' => $item->id]) }}">
-        <button type="submit" class="btn btn-primary">Edit</button>
-    </a>&nbsp;
-    <a href="{{ route('category.delete', ['id' => $item->id]) }}">
-        <button type="submit" class="btn btn-danger">Delete</button>
-    </a>
-</td>
-
-                                       
-                                        @endforeach
+                                        <td>
+                                            <a href="{{ route('category.edit', ['id' => $item->id]) }}">
+                                                <button type="submit" class="btn btn-primary">Edit</button>
+                                            </a>&nbsp;
+                                            <a href="{{ route('category.delete', ['id' => $item->id]) }}">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </a>
+                                        </td>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -87,14 +85,14 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-   
+
     <script>
-    function confirmDelete(categoryId) {
-        if (confirm('Are you sure you want to delete this category?')) {
-           
-            document.getElementById('deleteForm' + categoryId).submit();
+        function confirmDelete(categoryId) {
+            if (confirm('Are you sure you want to delete this category?')) {
+
+                document.getElementById('deleteForm' + categoryId).submit();
+            }
         }
-    }
-</script>
+    </script>
 
     @include('admindashboard.include.footer')

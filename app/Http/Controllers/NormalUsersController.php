@@ -59,10 +59,7 @@ class NormalUsersController extends BaseApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(NormalUsers $normalUsers)
-    {
-        //
-    }
+   
 
     public function becomeorganizer(Request $request, NormalUsers $normalUsers)
     {
@@ -89,6 +86,50 @@ class NormalUsersController extends BaseApiController
                 dd($e->getMessage());
                 return $this->sendError("Server Error. Please try again later.");
             }
+        }
+    }
+    public function allnormaluser(Request $request, NormalUsers $normalUsers)
+    {
+        {
+            try {
+                $user = NormalUsers::where('status', 0)->get();
+                return view('admindashboard.allusers', compact('user'));
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+                return $this->sendError("Server Error. Please try again later.");
+            }
+        }
+    }
+    public function destroy($id)
+    {
+        try {
+          
+            $normalUsers = NormalUsers::findOrFail($id);
+            
+          
+            $normalUsers->delete();
+            
+          
+            return redirect()->back()->with('success', 'Organizer deleted successfully.');
+        } catch (\Exception $e) {
+           
+            return redirect()->back()->with('error', 'Failed to delete category.');
+        }
+    }
+
+    public function demoteorganizer($id)
+    {
+        try {
+          
+            $user = NormalUsers::findOrFail($id);
+            
+            $user->status = 0;
+            $user->save();
+          
+            return redirect()->back()->with('success', 'Organizer updated successfully.');
+        } catch (\Exception $e) {
+           
+            return redirect()->back()->with('error', 'Failed to delete category.');
         }
     }
 

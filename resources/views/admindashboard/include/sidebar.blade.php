@@ -11,7 +11,7 @@
 
 <!-- Nav Item - Dashboard -->
 <li class="nav-item active">
-    <a class="nav-link" href="index.html">
+    <a class="nav-link" href="{{ route('dashboard') }}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
 </li>
@@ -57,6 +57,12 @@
     <a class="nav-link" href="{{ route('category') }}">
         <i class="fas fa-fw fa-chart-area"></i>
         <span>Category</span></a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ url('getall-normaluser') }}">
+        <i class="fas fa-fw fa-chart-area"></i>
+        <span>Normal Users</span></a>
 </li>
 </ul>
 
