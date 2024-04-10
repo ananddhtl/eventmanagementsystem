@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\EventRequest;
 use App\Http\Resources\EventResource;
+use App\Models\BookEvent;
 use App\Models\Event;
-use Illuminate\Http\Request;
-use App\Models\NormalUsers;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
 use App\Models\FavouriteEvent;
+use App\Models\NormalUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends BaseApiController
 {
@@ -38,22 +39,20 @@ class EventController extends BaseApiController
     public function getorganizerevent()
     {
         try {
-            $userid = auth('api')->user()->id; 
-    
-            $events = Event::where('organizer_id', $userid)->where('status',1)->get();
-    
-           
+            $userid = auth('api')->user()->id;
+
+            $events = Event::where('organizer_id', $userid)->where('status', 1)->get();
+
             if ($events->isEmpty()) {
                 return $this->sendError('Events not found for this organizer!');
             }
-    
-           
+
             return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');
         } catch (Exception $e) {
             return $this->sendError('Something went wrong!');
         }
     }
-    
+
     public function forhomepageapi()
     {
         try {
@@ -79,48 +78,47 @@ class EventController extends BaseApiController
      * Store a newly created resource in storage.
      */
     public function store(EventRequest $request)
-{
-    try {
-        DB::beginTransaction();
-        $validated = $request->validated();
-        $user = NormalUsers::findOrFail(auth('api')->user()->id);
+    {
+        try {
+            DB::beginTransaction();
+            $validated = $request->validated();
+            $user = NormalUsers::findOrFail(auth('api')->user()->id);
 
-        if ($request->hasFile('thumbnail')) {
-            $image = $request->file('thumbnail');
-            $img_name = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->move('uploads/event/', $img_name);
-            $save_url = '/uploads/event/' . $img_name;
-            $thumbnail = $save_url; 
-        } else {
-            $thumbnail = null; 
+            if ($request->hasFile('thumbnail')) {
+                $image = $request->file('thumbnail');
+                $img_name = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+                $image->move('uploads/event/', $img_name);
+                $save_url = '/uploads/event/' . $img_name;
+                $thumbnail = $save_url;
+            } else {
+                $thumbnail = null;
+            }
+
+            $event = Event::create([
+                'event_title' => $validated['event_title'],
+                'description' => $validated['description'],
+                'event_date' => $validated['event_date'],
+                'event_time' => $validated['event_time'],
+                'location' => $validated['location'],
+                'category' => $validated['category'],
+                'thumbnail' => $thumbnail,
+                'total_seats' => $validated['total_seats'],
+                'total_vip_seats' => $validated['total_vip_seats'],
+                'total_public_seats' => $validated['total_public_seats'],
+                'vip_seats_price' => $validated['vip_seats_price'],
+                'public_seats_price' => $validated['public_seats_price'],
+                'organizer_id' => $user->id,
+            ]);
+
+            DB::commit();
+
+            return $this->sendResponse([], "Successfully Stored");
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollBack();
+            return $this->sendError("Server Error. Please try again later.");
         }
-
-        $event = Event::create([
-            'event_title' => $validated['event_title'],
-            'description' => $validated['description'],
-            'event_date' => $validated['event_date'],
-            'event_time' => $validated['event_time'],
-            'location' => $validated['location'],
-            'category' => $validated['category'],
-            'thumbnail' => $thumbnail, 
-            'total_seats' => $validated['total_seats'],
-            'total_vip_seats' => $validated['total_vip_seats'],
-            'total_public_seats' => $validated['total_public_seats'],
-            'vip_seats_price' => $validated['vip_seats_price'],
-            'public_seats_price' => $validated['public_seats_price'],
-            'organizer_id' => $user->id,
-        ]);
-
-        DB::commit();
-
-        return $this->sendResponse([], "Successfully Stored");
-    } catch (\Exception $e) {
-        dd($e->getMessage());
-        DB::rollBack();
-        return $this->sendError("Server Error. Please try again later.");
     }
-}
-
 
     /**
      * Display the specified resource.
@@ -142,55 +140,50 @@ class EventController extends BaseApiController
      * Update the specified resource in storage.
      */
     public function update(EventRequest $request, $id)
-{
-    try {
-        DB::beginTransaction();
-        $validated = $request->validated();
-        $user = NormalUsers::findOrFail(auth('api')->user()->id);
-        
-        
-        if (!$user) {
-            return $this->sendError('User not found!');
-        }
-        
-       
-        $event = Event::where('id', $id)
-            ->where('organizer_id', $user->id)
-            ->firstOrFail();
-        
-       
-        if ($request->hasFile('thumbnail')) {
-            $image = $request->file('thumbnail');
-            $img_name = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->move('uploads/event/', $img_name);
-            $save_url = '/uploads/event/' . $img_name;
-            $event->thumbnail = $save_url;
-        }
-        
-       
-        $event->event_title = $validated['event_title'];
-        $event->description = $validated['description'];
-        $event->event_date = $validated['event_date'];
-        $event->event_time = $validated['event_time'];
-        $event->location = $validated['location'];
-        $event->total_seats = $validated['total_seats'];
-        $event->total_vip_seats = $validated['total_vip_seats'];
-        $event->total_public_seats = $validated['total_public_seats'];
-        $event->vip_seats_price = $validated['vip_seats_price'];
-        $event->public_seats_price = $validated['public_seats_price'];
-       
-        $event->save();
+    {
+        try {
+            DB::beginTransaction();
+            $validated = $request->validated();
+            $user = NormalUsers::findOrFail(auth('api')->user()->id);
 
-        DB::commit();
+            if (!$user) {
+                return $this->sendError('User not found!');
+            }
 
-        return $this->sendResponse([], "Successfully Updated");
-    } catch (\Exception $e) {
-        dd($e->getMessage());
-        DB::rollBack();
-        return $this->sendError("Server Error. Please try again later.");
+            $event = Event::where('id', $id)
+                ->where('organizer_id', $user->id)
+                ->firstOrFail();
+
+            if ($request->hasFile('thumbnail')) {
+                $image = $request->file('thumbnail');
+                $img_name = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+                $image->move('uploads/event/', $img_name);
+                $save_url = '/uploads/event/' . $img_name;
+                $event->thumbnail = $save_url;
+            }
+
+            $event->event_title = $validated['event_title'];
+            $event->description = $validated['description'];
+            $event->event_date = $validated['event_date'];
+            $event->event_time = $validated['event_time'];
+            $event->location = $validated['location'];
+            $event->total_seats = $validated['total_seats'];
+            $event->total_vip_seats = $validated['total_vip_seats'];
+            $event->total_public_seats = $validated['total_public_seats'];
+            $event->vip_seats_price = $validated['vip_seats_price'];
+            $event->public_seats_price = $validated['public_seats_price'];
+
+            $event->save();
+
+            DB::commit();
+
+            return $this->sendResponse([], "Successfully Updated");
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollBack();
+            return $this->sendError("Server Error. Please try again later.");
+        }
     }
-}
-
 
     /**
      * Remove the specified resource from storage.
@@ -215,7 +208,7 @@ class EventController extends BaseApiController
     {
         try {
 
-            $event = Event::where('status',0)->get();
+            $event = Event::where('status', 0)->get();
 
             return view('admindashboard.eventdetails', compact('event'));
 
@@ -228,7 +221,7 @@ class EventController extends BaseApiController
     {
         try {
 
-            $event = Event::where('status',1)->get();
+            $event = Event::where('status', 1)->get();
 
             return view('admindashboard.acceptedeventdetails', compact('event'));
 
@@ -246,14 +239,14 @@ class EventController extends BaseApiController
         }
 
         $organizeremail = NormalUsers::join('events', 'normal_users.id', '=', 'events.organizer_id')
-                            ->where('events.id', $id)
-                            ->value('normal_users.email');
+            ->where('events.id', $id)
+            ->value('normal_users.email');
 
         $data = [
-            'email' => $organizeremail, 
-            'message' => "This is the text message"
+            'email' => $organizeremail,
+            'message' => "This is the text message",
         ];
-    
+
         Mail::send('email-template.approvaltemplate', $data, function ($message) use ($data) {
             $message->to($data['email']);
             $message->subject('Your Vehicle has been approved');
@@ -265,66 +258,91 @@ class EventController extends BaseApiController
     }
 
     public function searchevent(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'title' => 'required',
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json(['error' => $validator->errors()->first()], 400);
-    }
-
-    try {
-        $title = $request->input('title');
-        $events = Event::where('event_title', 'like', "%$title%")->get();
-        
-        if ($events->isEmpty()) {
-            return response()->json(['error' => 'Event not found'], 404);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 400);
         }
 
-        return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');
-    } catch (Exception $e) {
-        return $this->sendError('Something went wrong!');
-    }
-}
+        try {
+            $title = $request->input('title');
+            $events = Event::where('event_title', 'like', "%$title%")->get();
 
-public function categorywiseevent(Request $request, $id)
-{
-   
-    try {
-      
-        $events = Event::where('category', $id)->get();
-        
-        if ($events->isEmpty()) {
-            return response()->json(['error' => 'Event not found'], 404);
+            if ($events->isEmpty()) {
+                return response()->json(['error' => 'Event not found'], 404);
+            }
+
+            return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');
+        } catch (Exception $e) {
+            return $this->sendError('Something went wrong!');
         }
-
-        return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');
-    } catch (Exception $e) {
-        return $this->sendError('Something went wrong!');
     }
-}
-public function getorganizerfavouriteevent()
-{
-    try {
-        $user = NormalUsers::findOrFail(auth('api')->user()->id);
 
-       
-        $favouriteEvents = FavouriteEvent::where('user_id', $user->id)->pluck('event_id');
+    public function categorywiseevent(Request $request, $id)
+    {
 
-      
-        $events = Event::whereIn('id', $favouriteEvents)
-                       ->where('status', 1)
-                       ->get();
+        try {
 
-        if ($events->isEmpty()) {
-            return $this->sendError('Favorite Events not found for this organizer!');
+            $events = Event::where('category', $id)->get();
+
+            if ($events->isEmpty()) {
+                return response()->json(['error' => 'Event not found'], 404);
+            }
+
+            return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');
+        } catch (Exception $e) {
+            return $this->sendError('Something went wrong!');
         }
-
-        return $this->sendResponse(EventResource::collection($events), 'Events fetched successfully!');
-    } catch (Exception $e) {
-        return $this->sendError('Something went wrong!');
     }
-}
+    public function getorganizerfavouriteevent()
+    {
+        try {
+            $user = NormalUsers::findOrFail(auth('api')->user()->id);
+
+            $events = FavouriteEvent::join('events', 'favourite_events.event_id', '=', 'events.id')
+                ->select('events.*')
+                ->where('user_id', $user->id)
+                ->get();
+
+            if ($events->isEmpty()) {
+                return $this->sendError('Favorite Events not found for this organizer!');
+            }
+            $eventResources = EventResource::collection($events);
+            return $this->sendResponse($eventResources, 'Favorite Events fetched successfully!');
+        } catch (Exception $e) {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function eventsusers()
+    {
+        try {
+
+            $event = Event::where('status', 0)->get();
+
+            return view('admindashboard.eventusers', compact('event'));
+
+        } catch (Exception $e) {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function totaleventusers($id)
+    {
+        try {
+            $eventAttendees = BookEvent::where('event_id', $id)
+
+                ->join('normal_users', 'normal_users.id', '=', 'book_events.user_id')
+                ->select('normal_users.name', 'normal_users.phonenumber', 'book_events.*')
+                ->get();
+
+            return view('admindashboard.eventattendes', compact('eventAttendees'));
+        } catch (Exception $e) {
+            return $this->sendError('Something went wrong!');
+        }
+    }
 
 }

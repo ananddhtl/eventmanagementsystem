@@ -48,7 +48,9 @@ Route::post('/updatevenue/{id}', [VenueController::class, 'update'])->name('venu
 
 Route::get('/acceptevent/{id}', [EventController::class, 'acceptevent'])->name('event.accept');
 
+Route::get('/totaleventuserparticipants', [EventController::class, 'eventsusers'])->name('event.users');
 
+Route::get('/totaleventuserparticipants/{id}', [EventController::class, 'totaleventusers'])->name('total.eventusers');
 
 Route::get('getall-category', [CategoryController::class, 'index'])->name('category');
 

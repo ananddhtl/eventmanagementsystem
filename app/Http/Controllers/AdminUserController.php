@@ -8,6 +8,8 @@ use Hash;
 use Session;
 use App\Models\User;
 use App\Models\BookEvent;
+use App\Models\Event;
+use App\Models\Category;
 use App\Models\NormalUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -93,7 +95,9 @@ public function dashboard()
         $normalUsersCount = NormalUsers::where('status', 0)->count();
         $organizerCount = NormalUsers::where('status',1)->count();
         $adminUsersCount = User::count();
-        return view('admindashboard.index', compact('eventLabels', 'eventDataValues','normalUsersCount','organizerCount','adminUsersCount'));
+        $totalEvent = Event::count();
+        $venue = Category::count();
+        return view('admindashboard.index', compact('eventLabels', 'eventDataValues','normalUsersCount','organizerCount','adminUsersCount','totalEvent','venue'));
     }
     
     return redirect("login")->withSuccess('You are not allowed to access');

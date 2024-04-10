@@ -64,6 +64,11 @@
         <i class="fas fa-fw fa-chart-area"></i>
         <span>Normal Users</span></a>
 </li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('event.users') }}">
+        <i class="fas fa-fw fa-chart-area"></i>
+        <span>Total Event User Participants</span></a>
+</li>
 </ul>
 
        <!-- End of Sidebar -->
