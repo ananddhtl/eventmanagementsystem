@@ -267,7 +267,27 @@ class AuthController extends BaseApiController
         }
     }
 
+    public function updateprofile(Request $request)
+    {
+        try {
+            
 
+            $user = NormalUsers::findOrfail(auth('api')->user()->id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->phonenumber = $request->phonenumber;
+            $user->address = $request->address;
+            $user->gender = $request->gender;
+            $user->save();
+
+            return $this->sendResponse([
+                'user' => new NormalUsersResource($user),
+            ], "Profile updated successfully");
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return $this->sendError("Server Error. Please try again later.");
+        }
+    }
 
     public function getallcategory()
     {

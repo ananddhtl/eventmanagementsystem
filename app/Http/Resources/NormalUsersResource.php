@@ -18,7 +18,7 @@ class NormalUsersResource extends JsonResource
             'id' => "$this->id",
             'email' => $this->email,
             'name' => $this->name,
-            'phonenumber' => $this->phonenumber,
+            'phonenumber' => str($this->phonenumber),
             'address' => $this->address,
             'gender' => str($this->gender),
             'status' => $this->status,

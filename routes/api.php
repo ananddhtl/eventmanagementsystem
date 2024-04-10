@@ -39,6 +39,7 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('change-password', [AuthController::class, 'changePassword']);
+        Route::post('updateprofile', [AuthController::class, 'updateprofile']);
         Route::post('verify-otp', [AuthController::class, 'forgotOTPVerify']);
         Route::post('reset-password', [AuthController::class, 'resetPassword']);
         Route::post('become-organizer', [NormalUsersController::class, 'becomeorganizer']);
