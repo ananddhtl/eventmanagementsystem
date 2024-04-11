@@ -31,6 +31,7 @@ Route::get('signout', [AdminUserController::class, 'signOut'])->name('signout');
 Route::middleware(['auth'])->group(function () {
 
 Route::get('dashboard', [AdminUserController::class, 'dashboard'])->name('dashboard');
+
 Route::get('getall-events', [EventController::class, 'allevents'])->name('getallevents');
 
 Route::get('getall-acceptedevents', [EventController::class, 'allacceptedevents'])->name('getallacceptedevents');
@@ -43,6 +44,8 @@ Route::post('storevenue', [VenueController::class, 'store'])->name('storevenue')
 Route::get('/editvenue/{id}', [VenueController::class, 'edit'])->name('venue.edit');
 
 Route::get('/deletevenue/{id}', [VenueController::class, 'destroy'])->name('venue.delete');
+
+Route::get('/deleteevent/{id}', [EventController::class, 'destroy'])->name('event.delete');
 
 Route::post('/updatevenue/{id}', [VenueController::class, 'update'])->name('venue.update');
 

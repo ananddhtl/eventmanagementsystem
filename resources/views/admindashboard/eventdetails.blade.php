@@ -52,7 +52,9 @@
                                             <td>{{$item->vip_seats_price}}</td>
                                             <td>{{$item->public_seats_price}}</td>
                                             <td><a href="{{ route('event.accept', ['id' => $item->id]) }}"><button type="submit"
-                                                class="btn btn-primary">Accept Event</button></td>
+                                                class="btn btn-primary">Accept Event</button>&nbsp;
+                                                <a href="{{ route('event.delete', ['id' => $item->id]) }}"><button type="submit"
+                                                class="btn btn-danger">Delete Event</button></td>
                                         </tr>
                                         @endforeach
                                     </tbody>

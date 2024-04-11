@@ -14,9 +14,9 @@
 
                     <!-- Page Heading -->
 
-                    <div class="card shadow mb-4">
+                    <div id="invoice" class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary"> List of Events Attendes Users</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">{{$event->event_title}}</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -28,8 +28,8 @@
                                             <th>Ticket Qty</th>
                                             <th>Ticket Type</th>
                                             <th>Total Price</th>
-                                          
-                                            
+
+
                                         </tr>
                                     </thead>
 
@@ -41,7 +41,7 @@
                                             <td>{{$item->phonenumber}}</td>
                                             <td>{{$item->qty}}</td>
                                             <td>{{$item->ticket_type}}</td>
-                                            <td>{{$item->total_price}}</td> 
+                                            <td>{{$item->total_price}}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <button class="btn btn-primary" id="download-button">Download as PDF</button>
                 </div>
                 <!-- /.container-fluid -->
 
@@ -96,4 +96,16 @@
             </div>
         </div>
     </div>
+    <script>
+			const button = document.getElementById('download-button');
+
+			function generatePDF() {
+
+				const element = document.getElementById('invoice');
+
+				html2pdf().from(element).save();
+			}
+
+			button.addEventListener('click', generatePDF);
+		</script>
     @include('admindashboard.include.footer')

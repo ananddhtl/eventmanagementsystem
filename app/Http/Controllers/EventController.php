@@ -197,7 +197,7 @@ class EventController extends BaseApiController
                 return $this->sendError('Event not found!');
             }
             $event->delete();
-            return $this->sendResponse([], "Successfully Deleted");
+            return redirect()->back()->with('success', 'Your data has been deleted successfully');
 
         } catch (Exception $e) {
             return $this->sendError('Something went wrong!');
@@ -217,18 +217,33 @@ class EventController extends BaseApiController
         }
     }
 
-    public function allacceptedevents()
-    {
-        try {
+    public function allacceptedevents(Request $request)
+{
+    try {
+        $query = DB::table('events')->where('status', 1);
 
-            $event = Event::where('status', 1)->get();
-
-            return view('admindashboard.acceptedeventdetails', compact('event'));
-
-        } catch (Exception $e) {
-            return $this->sendError('Something went wrong!');
+       
+        if ($request->has('event_title')) {
+            $event_title = $request->event_title;
+            $query->where('event_title', 'like', '%' . $event_title . '%');
         }
+
+       
+        if ($request->has('from') && $request->has('to')) {
+            $from = $request->from;
+            $to = $request->to;
+            $query->whereBetween('event_date', [$from, $to]);
+        }
+
+        
+        $event = $query->get();
+
+        return view('admindashboard.acceptedeventdetails', compact('event'));
+    } catch (Exception $e) {
+        return $this->sendError('Something went wrong!');
     }
+}
+
 
     public function acceptevent(Event $event, $id)
     {
@@ -333,13 +348,14 @@ class EventController extends BaseApiController
     public function totaleventusers($id)
     {
         try {
+            $event = Event::select('event_title')->where('id',$id)->first();
             $eventAttendees = BookEvent::where('event_id', $id)
 
                 ->join('normal_users', 'normal_users.id', '=', 'book_events.user_id')
                 ->select('normal_users.name', 'normal_users.phonenumber', 'book_events.*')
                 ->get();
 
-            return view('admindashboard.eventattendes', compact('eventAttendees'));
+            return view('admindashboard.eventattendes', compact('eventAttendees','event'));
         } catch (Exception $e) {
             return $this->sendError('Something went wrong!');
         }

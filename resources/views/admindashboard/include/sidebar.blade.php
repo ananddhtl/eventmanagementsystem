@@ -2,7 +2,7 @@
 
 <!-- Sidebar - Brand -->
 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-   
+
     <div class="sidebar-brand-text mx-3">Admin Dashboard</div>
 </a>
 
@@ -35,13 +35,9 @@
         <i class="fas fa-fw fa-chart-area"></i>
         <span>Accepted Event List</span></a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="{{ route('getallacceptedevents') }}">
-        <i class="fas fa-fw fa-chart-area"></i>
-        <span> Event  List</span></a>
-</li>
 
-<!-- Nav Item - Utilities Collapse Menu -->
+
+
 <li class="nav-item">
     <a class="nav-link" href="{{ route('getallorganizer') }}">
         <i class="fas fa-fw fa-chart-area"></i>
@@ -128,9 +124,9 @@
                             </div>
                         </li>
 
-                       
 
-                        
+
+
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -145,7 +141,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                               
+
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="signout" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
