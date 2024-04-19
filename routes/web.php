@@ -70,7 +70,7 @@ Route::post('/updatecategory/{id}', [CategoryController::class, 'update'])->name
 
 Route::get('getall-organizer', [NormalUsersController::class, 'allorganizers'])->name('getallorganizer');
 
-Route::get('getall-normaluser', [NormalUsersController::class, 'allnormaluser'])->name('getallnormaluser');
+Route::get('getall-normaluser', [NormalUsersController::class, 'allnormaluser'])->name('normalusers');
 
 Route::get('/deleteorganier/{id}', [NormalUsersController::class, 'destroy'])->name('delete.organizer');
 

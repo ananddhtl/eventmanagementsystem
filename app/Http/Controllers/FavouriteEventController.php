@@ -36,18 +36,18 @@ class FavouriteEventController extends BaseApiController
              
              $user = NormalUsers::findOrFail(auth('api')->user()->id);
      
-             // Check if the event already exists in user's favorites
+            
              $existingFavorite = FavouriteEvent::where('user_id', $user->id)
                                                ->where('event_id', $request->event_id)
                                                ->first();
      
              if ($existingFavorite) {
-                 // Event already exists in favorites, return appropriate response
+                
                  DB::rollBack();
                  return $this->sendError("Event already added to favorites.");
              }
      
-             // Event doesn't exist in favorites, create a new entry
+           
              $favouriteEvent = FavouriteEvent::create([
                  'event_id' => $request->event_id,
                  'user_id' => $user->id,
@@ -57,15 +57,13 @@ class FavouriteEventController extends BaseApiController
      
              return $this->sendResponse([], "Successfully added to favorites");
          } catch (\Exception $e) {
-             // If an exception occurs, rollback transaction
+             
              DB::rollBack();
              return $this->sendError("Server Error. Please try again later.");
          }
      }
      
-    /**
-     * Display the specified resource.
-     */
+    
     public function show(FavouriteEvent $favouriteEvent)
     {
         //

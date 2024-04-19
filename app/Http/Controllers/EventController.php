@@ -58,6 +58,7 @@ class EventController extends BaseApiController
         try {
             $events = Event::all()->shuffle();
 
+            
             $eventResources = [];
             foreach ($events as $event) {
                 $eventResources[] = new EventResource($event);
