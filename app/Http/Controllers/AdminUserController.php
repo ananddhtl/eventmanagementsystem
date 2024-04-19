@@ -20,11 +20,12 @@ class AdminUserController extends Controller
 {
     public function index()
     {
-       
+
+
         return view('admindashboard.login');
     }
 
-    
+
 
     public function adminLogin(Request $request)
     {
@@ -48,7 +49,7 @@ class AdminUserController extends Controller
 
     public function adminregisteration(Request $request)
     {
-       
+
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
@@ -67,41 +68,62 @@ class AdminUserController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-           
+
         ]);
     }
 
 
-public function dashboard()
-{
-    if (Auth::check()) {
-        
-        $bookevents = BookEvent::get();
-        
-       
-        $eventsByMonth = $bookevents->groupBy(function ($event) {
-            return Carbon::parse($event->created_at)->format('M');
-        });
+    public function dashboard()
+    {
+        if (Auth::check()) {
+            // Existing code to get book events and categorize them by month
+            $bookevents = BookEvent::get();
+            $eventsByMonth = $bookevents->groupBy(function ($event) {
+                return Carbon::parse($event->created_at)->format('M');
+            });
 
-      
-        $eventLabels = [];
-        $eventDataValues = [];
+            // Prepare event data for chart
+            $eventLabels = [];
+            $eventDataValues = [];
+            foreach ($eventsByMonth as $month => $events) {
+                $eventLabels[] = $month;
+                $eventDataValues[] = count($events);
+            }
 
-        foreach ($eventsByMonth as $month => $events) {
-            $eventLabels[] = $month;
-            $eventDataValues[] = count($events);
+            // Existing user and event counts
+            $normalUsersCount = NormalUsers::where('status', 0)->count();
+            $organizerCount = NormalUsers::where('status', 1)->count();
+            $adminUsersCount = User::count();
+            $totalEvent = Event::count();
+            $venue = Category::count();
+
+            // Additional counts for event categories
+            $musicCount = Event::where('category', 'Music')->count();
+            $sportsCount = Event::where('category', 'Sports')->count();
+            $othersCount = Event::whereNotIn('category', ['Music', 'Sports'])->count();
+
+            // Return view with all data compacted
+            return view(
+                'admindashboard.index',
+                compact(
+                    'eventLabels',
+                    'eventDataValues',
+                    'normalUsersCount',
+                    'organizerCount',
+                    'adminUsersCount',
+                    'totalEvent',
+                    'venue',
+                    'musicCount',
+                    'sportsCount',
+                    'othersCount'
+                )
+            );
         }
 
-        $normalUsersCount = NormalUsers::where('status', 0)->count();
-        $organizerCount = NormalUsers::where('status',1)->count();
-        $adminUsersCount = User::count();
-        $totalEvent = Event::count();
-        $venue = Category::count();
-        return view('admindashboard.index', compact('eventLabels', 'eventDataValues','normalUsersCount','organizerCount','adminUsersCount','totalEvent','venue'));
+        // Redirect to login if not authenticated
+        return redirect("login")->withSuccess('You are not allowed to access');
     }
-    
-    return redirect("login")->withSuccess('You are not allowed to access');
-}
+
 
 
     public function signOut()

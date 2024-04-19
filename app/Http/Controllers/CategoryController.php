@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,8 +13,7 @@ class CategoryController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        {
+    { {
             $category = Category::all();
             return view('admindashboard.allcategory', compact('category'));
         }
@@ -107,19 +107,29 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    public function dashboard()
+    {
+        // Count for each type of event
+        $musicCount = Event::where('category', 'Music')->count();
+        $sportsCount = Event::where('category', 'Sports')->count();
+        $othersCount = Event::whereNotIn('category', ['Music', 'Sports'])->count();
+
+        return view('admindashboard.index', compact('musicCount', 'sportsCount', 'othersCount'));
+    }
+
     public function destroy($id)
     {
         try {
-          
+
             $category = Category::findOrFail($id);
-            
-          
+
+
             $category->delete();
-            
-          
+
+
             return redirect()->back()->with('success', 'Category deleted successfully.');
         } catch (\Exception $e) {
-           
+
             return redirect()->back()->with('error', 'Failed to delete category.');
         }
     }

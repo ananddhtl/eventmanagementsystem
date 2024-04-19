@@ -40,7 +40,14 @@
                                             <td>{{$item->name}}</td>
                                             <td>{{$item->phonenumber}}</td>
                                             <td>{{$item->address}}</td>
-                                            <td>{{$item->gender}}</td>
+                                             <td>
+                                                @if ($item->gender == 1)
+                                                    Male
+                                                @elseif ($item->gender == 0)
+                                                    Female
+                                               
+                                                @endif
+                                            </td>
                                             <td>{{$item->email}}</td>
                                             <td><a href="{{ route('delete.organizer', ['id' => $item->id]) }}"><button type="submit"
                                                 class="btn btn-primary">Delete Organizer</button>&nbsp;&nbsp;<a href="{{ route('demote.organizer', ['id' => $item->id]) }}"><button type="submit"

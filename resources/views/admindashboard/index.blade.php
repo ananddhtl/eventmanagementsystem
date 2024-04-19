@@ -1,4 +1,6 @@
 @include('admindashboard.include.header')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 
 <body id="page-top">
 
@@ -32,8 +34,9 @@
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{$normalUsersCount}}</div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                <i class="fas fa-user fa-2x text-gray-300"></i>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -50,7 +53,7 @@
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{$totalEvent}}</div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -73,8 +76,9 @@
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                <i class="fas fa-user fa-2x text-gray-300"></i>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -125,7 +129,7 @@
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Total Users</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Total Event Registered</h6>
                             <div class="dropdown no-arrow">
 
                             </div>
@@ -137,13 +141,13 @@
                             </div>
                             <div class="mt-4 text-center small">
                                 <span class="mr-2">
-                                    <i class="fas fa-circle text-primary"></i> Organizers
+                                    <i class="fas fa-circle text-primary"></i> Music
                                 </span>
                                 <span class="mr-2">
-                                    <i class="fas fa-circle text-success"></i> Normal Users
+                                    <i class="fas fa-circle text-success"></i> Sports
                                 </span>
                                 <span class="mr-2">
-                                    <i class="fas fa-circle text-info"></i> Admin User
+                                    <i class="fas fa-circle text-info"></i> Others
                                 </span>
                             </div>
                         </div>
@@ -163,7 +167,7 @@
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>Copyright &copy; Your Website 2021</span>
+                <span>Copyright &copy; EventEase 2024</span>
             </div>
         </div>
     </footer>
@@ -301,10 +305,9 @@
             }
         });
     </script>
+    
 <script>
-    // Set new default font family and font color to mimic Bootstrap's default styling
-    Chart.defaults.global.defaultFontFamily = 'Nunito',
-        '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
     Chart.defaults.global.defaultFontColor = '#858796';
 
     // Pie Chart Example
@@ -312,9 +315,9 @@
     var myPieChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ["Normal Users", "Organizer", "Admin Users"],
+            labels: ["Music", "Sports", "Others"], // Labels for segments
             datasets: [{
-                data: [{{ $normalUsersCount }}, {{ $organizerCount }}, {{ $adminUsersCount }}],
+                data: [{{ $musicCount }}, {{ $sportsCount }}, {{ $othersCount }}], // Data from controller
                 backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
                 hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
                 hoverBorderColor: "rgba(234, 236, 244, 1)",
@@ -333,9 +336,10 @@
                 caretPadding: 10,
             },
             legend: {
-                display: false
+                display: true // Set to true if you want to display the legend
             },
             cutoutPercentage: 80,
         },
     });
 </script>
+
