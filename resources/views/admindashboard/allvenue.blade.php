@@ -23,11 +23,11 @@
                     </a>
                 </div>
                 <div class="card-body ">
-                @if(session('message'))
-<div id="successMessage" class="alert alert-success">
-    {{ session('message') }}
-</div>
-@endif
+                    @if (session('message'))
+                        <div id="successMessage" class="alert alert-success">
+                            {{ session('message') }}
+                        </div>
+                    @endif
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
@@ -40,15 +40,16 @@
 
 
                             <tbody>
-                                @foreach($venue as $item)
-                                <tr>
-                                    <td>{{$item->title}}</td>
+                                @foreach ($venue as $item)
+                                    <tr>
+                                        <td>{{ $item->title }}</td>
 
-                                    <td><a href="{{ route('venue.edit', ['id' => $item->id]) }}"><button type="submit"
-                                                class="btn btn-primary">Edit</button></a>&nbsp; <a href="{{ route('venue.delete', ['id' => $item->id]) }}">
-        <button type="submit" class="btn btn-danger">Delete</button>
-    </a>
-                                        @endforeach
+                                        <td><a href="{{ route('venue.edit', ['id' => $item->id]) }}"><button
+                                                    type="submit" class="btn btn-primary">Edit</button></a>&nbsp; <a
+                                                href="{{ route('venue.delete', ['id' => $item->id]) }}">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </a>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -82,12 +83,12 @@
         <i class="fas fa-angle-up"></i>
     </a>
     <script>
-    function confirmDelete(itemId) {
-        if (confirm('Are you sure you want to delete this item?')) {
-            // Instead of 'deleteForm' + item, it should be 'deleteForm' + itemId
-            document.getElementById('deleteForm' + itemId).submit();
+        function confirmDelete(itemId) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                // Instead of 'deleteForm' + item, it should be 'deleteForm' + itemId
+                document.getElementById('deleteForm' + itemId).submit();
+            }
         }
-    }
     </script>
 
 

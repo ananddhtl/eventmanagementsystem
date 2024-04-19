@@ -102,7 +102,7 @@ class BookEventController extends BaseApiController
             return $this->sendResponse([], "Successfully Stored");
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
+           
             return $this->sendError("Server Error. Please try again later.");
         }
     }
