@@ -88,18 +88,31 @@ class NormalUsersController extends BaseApiController
             }
         }
     }
-    public function allnormaluser(Request $request, NormalUsers $normalUsers)
-    {
-        {
-            try {
-                $user = NormalUsers::where('status', 0)->get();
-                return view('admindashboard.allusers', compact('user'));
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-                return $this->sendError("Server Error. Please try again later.");
-            }
+    public function allNormalUser(Request $request)
+{
+    try {
+        $usersQuery = NormalUsers::query();
+
+       
+        if ($request->has('user_name')) {
+            $userName = $request->input('user_name');
+            $usersQuery->where('name', 'like', "%$userName%");
         }
+
+       
+        $usersQuery->where('status', 0);
+
+    
+        $user = $usersQuery->get();
+
+      
+        return view('admindashboard.allusers', compact('user'));
+    } catch (\Exception $e) {
+       
+        dd($e->getMessage()); 
+        return $this->sendError("Server Error. Please try again later."); 
     }
+}
     public function destroy($id)
     {
         try {
@@ -110,7 +123,7 @@ class NormalUsersController extends BaseApiController
             $normalUsers->delete();
             
           
-            return redirect()->back()->with('success', 'Organizer deleted successfully.');
+            return redirect()->back()->with('success', 'Data deleted successfully.');
         } catch (\Exception $e) {
            
             return redirect()->back()->with('error', 'Failed to delete category.');

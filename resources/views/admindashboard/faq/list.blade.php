@@ -28,10 +28,10 @@
 
             <div class="card shadow ">
                 <div class="card-header ">
-                    <h6 class="m-0 font-weight-bold text-primary">Venue List</h6>
-                    <a href="{{ route('addvenue') }}" style="float:right;" class="btn btn-primary btn-icon-split ">
+                    <h6 class="m-0 font-weight-bold text-primary">FAQ List</h6>
+                    <a href="{{ route('addfaq') }}" style="float:right;" class="btn btn-primary btn-icon-split ">
 
-                        <span class="text">Add Venue</span>
+                        <span class="text">Add FAQ</span>
                     </a>
                 </div>
                 <div class="card-body ">
@@ -44,23 +44,26 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th> Title</th>
-
+                                    <th> Question</th>
+                                    <th> Answer</th>
                                     <th> Action</th>
                                 </tr>
                             </thead>
 
 
                             <tbody>
-                                @foreach ($venue as $item)
+                                @foreach ($list as $item)
                                     <tr>
-                                        <td>{{ $item->title }}</td>
-
-                                        <td><a href="{{ route('venue.edit', ['id' => $item->id]) }}"><button
-                                                    type="submit" class="btn btn-primary">Edit</button></a>&nbsp; <a
-                                                href="{{ route('venue.delete', ['id' => $item->id]) }}">
+                                        <td>{{ $item->question }}</td>
+                                        <td>{{ $item->answer }}</td>
+                                        <td>
+                                            <a href="{{ route('faq.edit', ['id' => $item->id]) }}">
+                                                <button type="submit" class="btn btn-primary">Edit</button>
+                                            </a>&nbsp;
+                                            <a href="{{ route('faq.delete', ['id' => $item->id]) }}">
                                                 <button type="submit" class="btn btn-danger">Delete</button>
                                             </a>
+                                        </td>
                                 @endforeach
                             </tbody>
                         </table>

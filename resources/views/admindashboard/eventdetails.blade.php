@@ -60,6 +60,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            {{$event->links()}};
                         </div>
                     </div>
 

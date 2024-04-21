@@ -6,6 +6,8 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\NormalUsersController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PollController;
+use App\Http\Controllers\FAQController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +65,22 @@ Route::post('storecategory', [CategoryController::class, 'store'])->name('storec
 
 Route::get('/editcategory/{id}', [CategoryController::class, 'edit'])->name('category.edit');
 
+
+Route::get('add-faq', [FAQController::class, 'addfaq'])->name('addfaq');
+
+
+Route::get('faqlist', [FAQController::class, 'index'])->name('faq.index');
+
+
+Route::post('storefaq', [FAQController::class, 'store'])->name('storefaq');
+
+Route::post('/updatefaq/{id}', [FAQController::class, 'update'])->name('updatefaq');
+
+Route::get('/deletefaq/{id}', [FAQController::class, 'destroy'])->name('faq.delete'); 
+
+Route::get('/editfaq/{id}', [FAQController::class, 'edit'])->name('faq.edit');
+
+Route::post('/updatefaq/{id}', [FAQController::class, 'update'])->name('faq.update');
 
 Route::get('/deletecategory/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
 

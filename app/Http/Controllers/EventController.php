@@ -209,7 +209,7 @@ class EventController extends BaseApiController
     {
         try {
 
-            $event = Event::where('status', 0)->get();
+            $event = Event::where('status', 0)->simplePaginate(7);
 
             return view('admindashboard.eventdetails', compact('event'));
 
@@ -333,16 +333,23 @@ class EventController extends BaseApiController
         }
     }
 
-    public function eventsusers()
+    public function eventsUsers(Request $request)
     {
         try {
-
-            $event = Event::where('status', 0)->get();
-
+            $eventsQuery = Event::query();
+    
+            
+            if ($request->has('title')) {
+                $title = $request->input('title');
+                $eventsQuery->where('event_title', 'like', "%$title%");
+            }
+    
+            $eventsQuery->where('status', 1);
+            $event = $eventsQuery->simplePaginate(7);
+    
             return view('admindashboard.eventusers', compact('event'));
-
-        } catch (Exception $e) {
-            return $this->sendError('Something went wrong!');
+        } catch (\Exception $e) {
+           
         }
     }
 

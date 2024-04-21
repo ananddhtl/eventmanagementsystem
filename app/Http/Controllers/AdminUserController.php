@@ -82,7 +82,7 @@ class AdminUserController extends Controller
                 return Carbon::parse($event->created_at)->format('M');
             });
 
-            // Prepare event data for chart
+          
             $eventLabels = [];
             $eventDataValues = [];
             foreach ($eventsByMonth as $month => $events) {
@@ -90,19 +90,18 @@ class AdminUserController extends Controller
                 $eventDataValues[] = count($events);
             }
 
-            // Existing user and event counts
+          
             $normalUsersCount = NormalUsers::where('status', 0)->count();
             $organizerCount = NormalUsers::where('status', 1)->count();
             $adminUsersCount = User::count();
             $totalEvent = Event::count();
             $venue = Category::count();
-
-            // Additional counts for event categories
+            $totalRevenue = BookEvent::sum('total_price');
             $musicCount = Event::where('category', 'Music')->count();
             $sportsCount = Event::where('category', 'Sports')->count();
             $othersCount = Event::whereNotIn('category', ['Music', 'Sports'])->count();
 
-            // Return view with all data compacted
+           
             return view(
                 'admindashboard.index',
                 compact(
@@ -113,6 +112,7 @@ class AdminUserController extends Controller
                     'adminUsersCount',
                     'totalEvent',
                     'venue',
+                    'totalRevenue',
                     'musicCount',
                     'sportsCount',
                     'othersCount'
@@ -120,7 +120,7 @@ class AdminUserController extends Controller
             );
         }
 
-        // Redirect to login if not authenticated
+       
         return redirect("login")->withSuccess('You are not allowed to access');
     }
 

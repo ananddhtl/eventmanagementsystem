@@ -48,7 +48,7 @@ class VenueController extends Controller
             $venue->save();
 
             DB::commit();
-            return redirect()->route('venue')->with('message', 'Your data has been saved');
+            return redirect()->route('venue')->with('success', 'Your data has been saved');
         } catch (\Exception $e) {
             DB::rollBack();
             dd($e->getMessage());
@@ -94,7 +94,7 @@ class VenueController extends Controller
 
             DB::commit();
 
-            return redirect()->route('venue')->with('message', 'Your data has been updated');
+            return redirect()->route('venue')->with('success', 'Your data has been updated');
         } catch (\Exception $e) {
             DB::rollBack();
             dd($e->getMessage());
@@ -113,7 +113,7 @@ class VenueController extends Controller
             return response()->json(['error' => 'Category  not found'], 404);
         }
         $venue->delete();
-        return redirect()->route('venue')->with('message', 'Your data has been deleted successfully');
+        return redirect()->route('venue')->with('success', 'Your data has been deleted successfully');
     }
 
     
