@@ -30,6 +30,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
     Route::get('geteventdetails/{id}', [EventController::class, 'index']);
     Route::get('getallevent', [EventController::class, 'forhomepageapi']);
+    Route::get('getallfaq', [AuthController::class, 'forfaq']);
     Route::get('searchevent', [EventController::class, 'searchevent']);
     Route::get('getallvenue', [AuthController::class, 'getallvenue']);
     Route::get('getallcategory', [AuthController::class, 'getallcategory']);

@@ -7,8 +7,10 @@ use App\Http\Requests\Api\User\LoginRequest;
 use App\Http\Requests\Api\User\RegisterRequest;
 use App\Http\Resources\NormalUsersResource;
 use App\Http\Resources\VenueResource;
+use App\Http\Resources\FAQResource;
 use App\Models\NormalUsers;
 use App\Models\Venue;
+use App\Models\FAQ;
 use App\Models\Category;
 use Carbon\Carbon;
 use Exception;
@@ -295,6 +297,18 @@ class AuthController extends BaseApiController
             $category = Category::all();
     
             return $this->sendResponse(VenueResource::collection($category), 'Data fetched successfully!');
+        } catch (Exception $e) {
+            dd($e->getMessage());
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function forfaq()
+    {
+        try {
+            $faq = FAQ::all();
+    
+            return $this->sendResponse(FAQResource::collection($faq), 'Data fetched successfully!');
         } catch (Exception $e) {
             dd($e->getMessage());
             return $this->sendError('Something went wrong!');
