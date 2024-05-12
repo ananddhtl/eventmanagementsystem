@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\EventResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BookEventResource extends JsonResource
@@ -18,11 +19,11 @@ class BookEventResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'transaction_code' => $this->transaction_code,
-            'event_id' => $this->event_id, 
+            'event_id' => $this->event_id,
             'qty' => $this->qty,
             'ticket_type' => $this->ticket_type,
             'total_price' => $this->total_price,
+            'event' => new EventResource($this->event), 
         ];
-        
     }
 }

@@ -10,5 +10,8 @@ class Event extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    
+    public function bookEvent()
+    {
+        return $this->hasOne(BookEvent::class);
+    }
 }

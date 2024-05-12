@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BookEventResource;
 use App\Models\BookEvent;
 use App\Models\Event;
 use App\Models\NormalUsers;
 use Illuminate\Http\Request;
-use App\Http\Resources\BookEventResource;
-use App\Http\Resources\EventResource;
 use Illuminate\Support\Facades\DB;
 
 class BookEventController extends BaseApiController
@@ -15,43 +14,26 @@ class BookEventController extends BaseApiController
     /**
      * Display a listing of the resource.
      */
-   
-     public function index()
-     {
-         try {
-             $user = NormalUsers::findOrFail(auth('api')->user()->id);
-     
-             if (!$user) {
-                 return $this->sendError('User not found!');
-             }
-     
-             $bookEvents = BookEvent::where('user_id', $user->id)->get();
-     
-             if ($bookEvents->isEmpty()) {
-                 return $this->sendError('Events not found!');
-             }
-     
-             $eventIds = $bookEvents->pluck('event_id')->toArray();
-     
-            
-             $events = Event::whereIn('id', $eventIds)->get();
-     
-            
-             $combinedEventData = [];
-             foreach ($events as $event) {
-                 $eventData = [
-                     'event' => new EventResource($event),
-                     'book_events' => $bookEvents->where('event_id', $event->id)->values(),
-                 ];
-                 $combinedEventData[] = $eventData;
-             }
-     
-             return $this->sendResponse($combinedEventData, 'Events and associated book events fetched successfully!');
-         } catch (Exception $e) {
-             return $this->sendError('Something went wrong!');
-         }
-     }
-     
+
+    public function index()
+    {
+        try {
+            $user = NormalUsers::findOrFail(auth('api')->user()->id);
+
+            $bookEvents = BookEvent::where('user_id', $user->id)->get();
+
+            if ($bookEvents->isEmpty()) {
+                return $this->sendError('Events not found!', 404);
+            }
+
+            return $this->sendResponse(BookEventResource::collection($bookEvents), 'Events fetched successfully!');
+        } catch (ModelNotFoundException $e) {
+            return $this->sendError('User not found!', 404);
+        } catch (Exception $e) {
+            return $this->sendError('Something went wrong!', 500);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -66,7 +48,7 @@ class BookEventController extends BaseApiController
     public function store(Request $request)
     {
         try {
-            
+
             DB::beginTransaction();
             $request->validate([
                 'event_id' => 'required',
@@ -76,7 +58,7 @@ class BookEventController extends BaseApiController
             ]);
             $user = NormalUsers::findOrFail(auth('api')->user()->id);
 
-             $event = Event::where('id', $request->event_id)->first();
+            $event = Event::where('id', $request->event_id)->first();
 
             if (!$event) {
                 return $this->sendError('Event not found!');
@@ -102,7 +84,7 @@ class BookEventController extends BaseApiController
             return $this->sendResponse([], "Successfully Stored");
         } catch (\Exception $e) {
             DB::rollBack();
-           
+
             return $this->sendError("Server Error. Please try again later.");
         }
     }

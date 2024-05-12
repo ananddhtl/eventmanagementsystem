@@ -76,7 +76,7 @@
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                <i class="fas fa-user fa-2x text-gray-300"></i>
+                                <i class="fas fa-map fa-2x text-gray-300"></i>
                                 </div>
                                 
                             </div>
@@ -95,7 +95,7 @@
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{$organizerCount}}</div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                    <i class="fas fa-user fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{$totalRevenue}}</div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                    <i class="fas fa-credit fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
